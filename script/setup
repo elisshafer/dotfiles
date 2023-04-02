@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Set Zsh as the current user's default shell
+sudo chsh -s /bin/zsh $(whoami)
+
+# Install Oh My Zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
