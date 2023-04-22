@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 # Set Zsh as the current user's default shell
 sudo chsh -s /bin/zsh $(whoami)
