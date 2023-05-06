@@ -8,17 +8,16 @@ local function map(mode, lhs, rhs, opts)
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
-print("running vim.g.mapleader")
 vim.g.mapleader = " "
 
 -- Better Exploring
 map("n", "<leader>pv", ":Explore<CR>")
 
 -- Better window navigation
-map("n", "<C-h>", "<C-w>h")
-map("n", "<C-j>", "<C-w>j")
-map("n", "<C-k>", "<C-w>k")
-map("n", "<C-l>", "<C-w>l")
+map("n", "<S-h>", "<C-w>h")
+map("n", "<S-j>", "<C-w>j")
+map("n", "<S-k>", "<C-w>k")
+map("n", "<S-l>", "<C-w>l")
 
 -- Faster saving
 map("n", "<leader>w", ":w<CR>")
