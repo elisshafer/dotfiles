@@ -27,4 +27,3 @@ vim.opt.showmode = false              -- Don't show mode (use statusline)
 
 -- Strip Trailing Whitespace
 vim.cmd("autocmd! BufWritePre * %s/\\s\\+$//e")
-

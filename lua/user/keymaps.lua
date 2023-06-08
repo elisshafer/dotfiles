@@ -13,14 +13,15 @@ vim.g.mapleader = " "
 -- Better Exploring
 map("n", "<leader>pv", ":Explore<CR>")
 
--- Better window navigation
-map("n", "<S-h>", "<C-w>h")
-map("n", "<S-j>", "<C-w>j")
-map("n", "<S-k>", "<C-w>k")
-map("n", "<S-l>", "<C-w>l")
-
 -- Faster saving
 map("n", "<leader>w", ":w<CR>")
+
+-- Faster quitting
+map("n", "<leader>q", ":q<CR>")
+
+
+-- Toggle highlight searching
+map("n", "<leader>h", ":set hlsearch!<CR>")
 
 -- Better indenting
 map("v", "<", "<gv")
@@ -32,4 +33,3 @@ map("v", "J", ":move '>+1<CR>gv-gv")
 
 -- Yank to the end of line
 map("n", "Y", "y$")
-

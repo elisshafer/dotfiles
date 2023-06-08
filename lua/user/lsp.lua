@@ -4,11 +4,12 @@
 local lspconfig = require('lspconfig')
 
 -- Setup LSP servers for various languages and tools
+lspconfig.eslint.setup{}
 lspconfig.gopls.setup{}
 lspconfig.golangci_lint_ls.setup{}
-lspconfig.pyre.setup{}
-lspconfig.eslint.setup{}
 lspconfig.graphql.setup{}
+lspconfig.pyre.setup{}
+lspconfig.tsserver.setup{}
 lspconfig.yamlls.setup{}
 
 -- Function to enable snippet support for a given LSP server
@@ -26,4 +27,3 @@ end
 -- Enable snippet support for JSON and HTML LSP servers
 enable_snippet_support('jsonls')
 enable_snippet_support('html')
-

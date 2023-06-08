@@ -39,37 +39,33 @@ packer.init({
         end,
     },
     git = {
-        clone_timeout = 300, -- Timeout, in seconds, for git clones
+        clone_timeout = 20, -- Timeout, in seconds, for git clones
     },
 })
 
 return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim' -- Packer manages itself
 
-  -- Utilities
-  use 'nvim-lua/plenary.nvim'
-
   -- Language Server Protocol
   use {
     'neovim/nvim-lspconfig',
-    config = function() require'lspconfig'.gopls.setup{} end,
+    config = function()
+      local lspconfig = require('lspconfig')
+
+      lspconfig.gopls.setup{}
+      lspconfig.pyright.setup {}
+      lspconfig.rust_analyzer.setup {
+        -- Server-specific settings. See `:help lspconfig-setup`
+        settings = {
+          ['rust-analyzer'] = {},
+        },
+      }
+      lspconfig.tsserver.setup {}
+    end,
   }
 
-  -- Snippets
-  use 'norcalli/snippets.nvim'
-
-  -- Text Manipulation
-  use 'rstacruz/vim-closer'
-  use 'tpope/vim-surround'
-  -- use 'windwp/nvim-spectre'
- 
-  -- Treesitter
-  use {
-    'nvim-treesitter/nvim-treesitter',
-    run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
-  }
-
-  -- Telescope
+  -- Utilities
+  use 'nvim-lua/plenary.nvim'
   use {
     'nvim-telescope/telescope.nvim',
     tag = '0.1.0',
@@ -81,21 +77,51 @@ return require('packer').startup(function(use)
       {'nvim-telescope/telescope-fzf-native.nvim'},
     },
   }
+  use {
+    'nvim-treesitter/nvim-treesitter',
+    run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
+  }
+
+  -- Autocompletion
+  use {
+    "hrsh7th/nvim-cmp",
+    requires = {
+      "hrsh7th/cmp-buffer", "hrsh7th/cmp-nvim-lsp",
+      'quangnguyen30192/cmp-nvim-ultisnips', 'hrsh7th/cmp-nvim-lua',
+      'octaltree/cmp-look', 'hrsh7th/cmp-path', 'hrsh7th/cmp-calc',
+      'f3fora/cmp-spell', 'hrsh7th/cmp-emoji'
+    }
+  }
+
+  -- Snippets
+ -- use 'norcalli/snippets.nvim'
+
+  -- Text Manipulation
+ -- use 'rstacruz/vim-closer'
+ -- use 'tpope/vim-surround'
+  -- use 'windwp/nvim-spectre'
+
+  -- Treesitter
 
   -- Color Schemes
   use {'dracula/vim', as = 'dracula'}
   use {'folke/tokyonight.nvim', as = 'tokyonight'}
-  use {'shaunsingh/nyoom.nvim', as = 'nyoom'} -- not working
-  use {
-    'rose-pine/neovim',
-    as = 'rose-pine',
-    config = function() vim.cmd('colorscheme rose-pine') end
-  } 
+  use {'rose-pine/neovim', as = 'rose-pine'}
+  use({
+    'projekt0n/github-nvim-theme',
+    config = function()
+      require('github-theme').setup({
+        -- ...
+      })
+
+      vim.cmd('colorscheme github_light')
+    end
+  })
 
 
-  use  "mbbill/undotree" 
+--  use  "mbbill/undotree"
 
-  use 'mfussenegger/nvim-dap'
+ -- use 'mfussenegger/nvim-dap'
 
 
 --   use 'sharkdp/fd'
@@ -103,24 +129,21 @@ return require('packer').startup(function(use)
 
   -- Go
   use 'fatih/vim-go'
-  use { 
-    "ray-x/go.nvim",
-    opt = false,
-    cmd = "BufWritePre *.go :silent! lua require('go.format').gofmt()",
-    requires = { {'ray-x/guihua.lua'} },
-    config = function() 
-      require('go').setup( {
-        goimport = 'gopls',
-        gofmt = 'gopls', -- if set to gopls will use golsp format
-        max_line_len = 90,
-        tag_transform = false,
-        test_dir = '',
-        comment_placeholder = '  ',
-        lsp_cfg = true, -- false: use your own lspconfig
-        lsp_gofumpt = true, -- true: set default gofmt in gopls format to gofumpt
-        lsp_on_attach = true, -- use on_attach from go.nvim
-        dap_debug = true,
-      }) 
+
+  -- Python
+  use {
+    'jose-elias-alvarez/null-ls.nvim',
+    config = function()
+      local null_ls = require("null-ls")
+
+      -- register any number of sources simultaneously
+      local sources = {
+        null_ls.builtins.formatting.isort,
+        null_ls.builtins.formatting.black,
+      }
+
+      null_ls.setup({ sources = sources })
     end,
+    requires = { "nvim-lua/plenary.nvim" },
   }
 end)
