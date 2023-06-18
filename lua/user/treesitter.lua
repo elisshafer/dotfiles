@@ -12,12 +12,11 @@ end
 
 ts_configs.setup {
   ensure_installed = {
-    "dockerfile", "go", "gomod", "graphql", "html", "http", "javascript", "json",
+    "help", "dockerfile", "c", "go", "gomod", "graphql", "html", "http", "javascript", "json", "css", "rust",
     "lua", "make", "markdown", "proto", "python", "scala", "sql", "tsx", "typescript", "vim", "yaml",
   },
   sync_install = false,
   auto_install = true,
-  ignore_install = {},
 
   highlight = {
     enable = true,

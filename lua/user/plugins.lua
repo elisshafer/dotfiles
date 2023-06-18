@@ -3,17 +3,17 @@
 local fn = vim.fn
 
 -- Automatically install packer.
-local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
     PACKER_BOOTSTRAP = fn.system({
-        "git",
-        "clone",
-        "--depth",
-        "1",
-        "https://github.com/wbthomason/packer.nvim",
+        'git',
+        'clone',
+        '--depth',
+        '1',
+        'https://github.com/wbthomason/packer.nvim',
         install_path,
     })
-    print("Installing packer close and reopen Neovim...")
+    print('Installing packer close and reopen Neovim...')
     vim.cmd([[packadd packer.nvim]])
 end
 
@@ -26,7 +26,7 @@ vim.cmd([[
   augroup end
 ]])
 
-local status_ok, packer = pcall(require, "packer")
+local status_ok, packer = pcall(require, 'packer')
 if not status_ok then
     return
 end
@@ -35,7 +35,7 @@ end
 packer.init({
     display = {
         open_fn = function()
-            return require("packer.util").float({ border = "rounded" })
+            return require('packer.util').float({ border = 'rounded' })
         end,
     },
     git = {
@@ -47,49 +47,60 @@ return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim' -- Packer manages itself
 
   -- Language Server Protocol
-  use {
-    'neovim/nvim-lspconfig',
-    config = function()
-      local lspconfig = require('lspconfig')
-
-      lspconfig.gopls.setup{}
-      lspconfig.pyright.setup {}
-      lspconfig.rust_analyzer.setup {
-        -- Server-specific settings. See `:help lspconfig-setup`
-        settings = {
-          ['rust-analyzer'] = {},
-        },
-      }
-      lspconfig.tsserver.setup {}
-    end,
-  }
+  use { 'neovim/nvim-lspconfig' }
 
   -- Utilities
   use 'nvim-lua/plenary.nvim'
   use {
-    'nvim-telescope/telescope.nvim',
-    tag = '0.1.0',
-    requires = {
-      {'nvim-lua/plenary.nvim'},
-      {'neovim/nvim-lspconfig'},
-      {'sharkdp/fd'},
-      {'nvim-tree/nvim-web-devicons'},
-      {'nvim-telescope/telescope-fzf-native.nvim'},
-    },
+      'nvim-telescope/telescope.nvim',
+      tag = '0.1.0',
+      requires = {
+          'nvim-lua/plenary.nvim',
+          'neovim/nvim-lspconfig',
+          'sharkdp/fd',
+          'nvim-tree/nvim-web-devicons',
+          'nvim-telescope/telescope-fzf-native.nvim',
+      },
+      config = function()
+          local builtin = require('telescope.builtin')
+          vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
+          vim.keymap.set('n', '<C-p>', builtin.git_files, {})
+          vim.keymap.set('n', '<leader>ps', function()
+              builtin.grep_string({ search = vim.fn.input('grep > ') })
+          end)
+          vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
+          vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
+          vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+      end
   }
   use {
-    'nvim-treesitter/nvim-treesitter',
-    run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
+      'tpope/vim-fugitive',
+      config = function()
+          vim.keymap.set('n', '<leader>gs', vim.cmd.Git)
+      end
   }
+  use 'f-person/git-blame.nvim'
+
+  -- Treesitter
+  use {
+      'nvim-treesitter/nvim-treesitter',
+      run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
+  }
+  use 'nvim-treesitter/playground'
 
   -- Autocompletion
   use {
-    "hrsh7th/nvim-cmp",
+    'hrsh7th/nvim-cmp',
     requires = {
-      "hrsh7th/cmp-buffer", "hrsh7th/cmp-nvim-lsp",
-      'quangnguyen30192/cmp-nvim-ultisnips', 'hrsh7th/cmp-nvim-lua',
-      'octaltree/cmp-look', 'hrsh7th/cmp-path', 'hrsh7th/cmp-calc',
-      'f3fora/cmp-spell', 'hrsh7th/cmp-emoji'
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-nvim-lsp',
+      'quangnguyen30192/cmp-nvim-ultisnips',
+      'hrsh7th/cmp-nvim-lua',
+      'octaltree/cmp-look',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-calc',
+      'f3fora/cmp-spell',
+      'hrsh7th/cmp-emoji'
     }
   }
 
@@ -101,25 +112,24 @@ return require('packer').startup(function(use)
  -- use 'tpope/vim-surround'
   -- use 'windwp/nvim-spectre'
 
-  -- Treesitter
-
   -- Color Schemes
   use {'dracula/vim', as = 'dracula'}
   use {'folke/tokyonight.nvim', as = 'tokyonight'}
-  use {'rose-pine/neovim', as = 'rose-pine'}
-  use({
-    'projekt0n/github-nvim-theme',
-    config = function()
-      require('github-theme').setup({
-        -- ...
-      })
+  use { 'projekt0n/github-nvim-theme' }
+  use {
+      'rose-pine/neovim',
+      as = 'rose-pine',
+      config = function()
+          vim.cmd('colorscheme rose-pine')
+      end
+  }
 
-      vim.cmd('colorscheme github_light')
-    end
-  })
-
-
---  use  "mbbill/undotree"
+  use  {
+      'mbbill/undotree',
+      config = function()
+          vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
+      end
+  }
 
  -- use 'mfussenegger/nvim-dap'
 
@@ -134,7 +144,7 @@ return require('packer').startup(function(use)
   use {
     'jose-elias-alvarez/null-ls.nvim',
     config = function()
-      local null_ls = require("null-ls")
+      local null_ls = require('null-ls')
 
       -- register any number of sources simultaneously
       local sources = {
@@ -144,6 +154,6 @@ return require('packer').startup(function(use)
 
       null_ls.setup({ sources = sources })
     end,
-    requires = { "nvim-lua/plenary.nvim" },
+    requires = { 'nvim-lua/plenary.nvim' },
   }
 end)
