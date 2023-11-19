@@ -12,7 +12,7 @@ end
 
 ts_configs.setup {
   ensure_installed = {
-    "help", "dockerfile", "c", "go", "gomod", "graphql", "html", "http", "javascript", "json", "css", "rust",
+    "dockerfile", "c", "go", "gomod", "graphql", "html", "http", "javascript", "json", "css", "rust",
     "lua", "make", "markdown", "proto", "python", "scala", "sql", "tsx", "typescript", "vim", "yaml",
   },
   sync_install = false,
