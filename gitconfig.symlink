@@ -1,12 +1,10 @@
 [user]
 	name = Eli Shafer
-	email = eshafer@axon.com
+	email = eli.shafer96@gmail.com
 [github]
-	user = eshafer
+	user = elisshafer
 [push]
 	default = simple
 	autoSetupRemote = true
-[credential]
-	helper = osxkeychain
 [submodule]
 	recurse = true
